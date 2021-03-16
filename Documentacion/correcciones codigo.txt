@@ -1,0 +1,12 @@
+- solicitar a adm que se puedan realizar consultas por otros campos o criterios
+resolver el container en IntegrationServiceNow no usar fabrica ... no necesario
+
+cada input debe tener entradas especificas no con dictionary .....
+
+cambiar answer por response (nombre clases )
+
+TypeHadware.IndexOf(device.Type) cambiar por any 
+
+validar que si se puede castear lo adiciona de lo contrario no 
+int.TryParse(property.Value.ToString(), out int resInt);
+expandoDict.Add(item.Name, resInt);

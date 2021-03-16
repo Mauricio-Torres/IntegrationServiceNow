@@ -1,0 +1,688 @@
+{
+  "endpointAdm": "http://192.168.1.221/ADMAPI/",
+  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU3ODgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNzIyNjcwNTgwNilcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNTMyNTk2Nzg3OClcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjM3NSIsIlVzZXJOYW1lIjpudWxsfQ.lciqsjtUqynEDL6XHNYsCj2apfjPuZ59mnSX8ccrmGU",
+  "userServiceNow": "admin",
+  "passwordServiceNow": "Aleja2014.",
+  "EndpointServiceNow": "https://dev52329.service-now.com/api/now/table/",
+  "relationship": {
+    "table": "cmdb_rel_ci",
+    "listRelationship": [
+      //{
+      //  "parent": "",
+      //  "type": "",
+      //  "child": ""
+      //}
+    ]
+  },
+  "table": [
+    {
+      "nameReference": "cmdb_rel_ci",
+      "name": "cmdb_rel_ci",
+      "searchBy": [ "name" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "parent",
+          "type": "string",
+          "mapperTo": "parent",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "type",
+          "type": "type",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "child",
+          "type": "string",
+          "mapperTo": "child",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        }
+
+      ]
+    },
+    {
+      "nameReference": "cmdb_model",
+      "name": "cmdb_model",
+      "searchBy": [ "name" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "sys_user",
+      "name": "sys_user",
+      "searchBy": [ "email" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "first_name",
+          "type": "string",
+          "mapperTo": "responsibleUserName",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": "",
+          "useSplit": true,
+          "positionInitial": true,
+          "required": true
+
+        },
+        {
+          "name": "last_name",
+          "type": "string",
+          "mapperTo": "responsibleUserName",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": "",
+          "useSplit": true,
+          "required": true,
+          "positionInitial": false
+        },
+        {
+          "name": "user_name",
+          "type": "string",
+          "mapperTo": "userName",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "mapperTo": "responsibleUserEmail",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": "",
+          "required": true
+
+        }
+      ]
+    },
+    {
+      "nameReference": "core_company_manufacturer",
+      "name": "core_company",
+      "searchBy": [ "name" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "manufacturer",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": "true"
+        },
+        {
+          "name": "vendor",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": "true"
+        }
+      ]
+    },
+    {
+      "nameReference": "core_company_company",
+      "name": "core_company",
+      "searchBy": [ "name" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "company",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": "false"
+        },
+        {
+          "name": "vendor",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": "false"
+        }
+      ]
+    },
+    {
+      "nameReference": "sys_choice",
+      "name": "sys_choice",
+      "searchBy": [ "label" ],
+      "typeHadware": [],
+      "fields": [
+        {
+          "name": "element",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "mapper": false,
+          "needId": false,
+          "required": true,
+          "defaultValue": "os"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "mapperTo": "operatingSystem",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "inactive",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": false,
+          "required": true,
+          "defaultValue": "cmdb_ci_computer"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "mapperTo": "operatingSystem",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_ci_computer",
+      "name": "cmdb_ci_computer",
+      "searchBy": [ "name", "object_id" ],
+      "typeHadware": [ "Desktop", "Laptop" ],
+      "fields": [
+        {
+          "name": "os",
+          "type": "string",
+          "mapperTo": "operatingSystem",
+          "reference": "sys_choice",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "os_version",
+          "type": "string",
+          "mapperTo": "operatingSystemVersion",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "name",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "short_description",
+          "type": "string",
+          "mapperTo": "description",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "serial_number",
+          "type": "string",
+          "mapperTo": "serial",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "model_id",
+          "type": "string",
+          "mapperTo": "model",
+          "reference": "cmdb_model",
+          "needId": true,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "disk_space",
+          "type": "int",
+          "mapperTo": "diskUsage",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "dns_domain",
+          "type": "string",
+          "mapperTo": "domain",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "ip_address",
+          "type": "int",
+          "mapperTo": "ipRegistred",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "sys_created_on",
+          "type": "string",
+          "mapperTo": "creationDate",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "object_id",
+          "type": "string",
+          "mapperTo": "id",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "assigned_to",
+          "type": "string",
+          "mapperTo": "responsibleUserName",
+          "reference": "sys_user",
+          "needId": true,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "string",
+          "mapperTo": "manufacturer",
+          "reference": "core_company_manufacturer",
+          "needId": true,
+          "mapper": true,
+          "defaultValue": ""
+        },
+
+
+
+
+
+        {
+          "name": "cpu_core_count",
+          "type": "int",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cpu_core_thread",
+          "type": "int",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cpu_count",
+          "type": "int",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cpu_name",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cpu_speed",
+          "type": "decimal",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cpu_type",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+
+        {
+          "name": "mac_address",
+          "type": "int",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "monitor",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "u_name_owner",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "ram",
+          "type": "decimal",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "os_service_pack",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "os_domain",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "cd_rom",
+          "type": "boolean",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "company",
+          "type": "string",
+          "mapperTo": "company",
+          "reference": "core_company_company",
+          "needId": true,
+          "mapper": false,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_ci_server",
+      "name": "cmdb_ci_server",
+      "searchBy": [ "" ],
+      "typeHadware": [ "Server" ],
+      "fields": [
+        {
+          "name": "used_for",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+
+        },
+        {
+          "name": "host_name",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "firewall_status",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "classification",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "dr_backup",
+          "type": "string",
+          "description": "Referencia a otro servidor que es el servidor de respaldo para este servidor.",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_ci_hardware",
+      "name": "cmdb_ci_hardware",
+      "searchBy": [ "" ],
+      "typeHadware": [ "Server" ],
+      "fields": [
+        {
+          "name": "hardware_status",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "assigned",
+          "type": "date",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_model_category",
+      "name": "cmdb_model_category",
+      "searchBy": [ "name" ],
+      "typeHadware": [ ],
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "cmdb_ci_class",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": "cmdb_ci_hardware"
+        },
+        {
+          "name": "product_model_class",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": "cmdb_hardware_product_model"
+        },
+        {
+          "name": "asset_class",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": "alm_hardware"
+        }
+      ]
+    }
+  ]
+
+}
