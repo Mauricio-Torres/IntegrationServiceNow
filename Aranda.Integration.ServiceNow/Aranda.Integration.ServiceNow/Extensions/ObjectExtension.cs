@@ -3,7 +3,10 @@ using Aranda.Integration.ServiceNow.Services;
 using Aranda.Integration.ServiceNow.Utils;
 using FastMember;
 using Microsoft.CSharp.RuntimeBinder;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -58,7 +61,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
             return expandoDict;
         }
 
-        public static bool ValidateRequiredFields(this ExpandoObject obj, List<FieldTable> fieldTables)
+        private static bool ValidateRequiredFields(this ExpandoObject obj, List<FieldTable> fieldTables)
         {
             List<FieldTable> fieldsRequired = fieldTables.Where(x => x.Required).ToList();
 
@@ -78,7 +81,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
             return control;
         }
 
-        public static void AddProperty(this ExpandoObject expando, Dictionary<string, object> propertiesValue, List<FieldTable> fieldTables)
+        public static void AddProperty(this ExpandoObject expando, Dictionary<string, object> propertiesValue, List<FieldTable> fieldTables, out bool validationFields)
         {
             var expandoDict = expando as IDictionary<string, object>;
 
@@ -86,7 +89,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
             List<FieldTable> fieldsNoMapperCI = fieldTables.Where(f => !f.Mapper).ToList();
 
             foreach (var item in fieldsMapperCI)
-            {
+            { 
                 if (!string.IsNullOrWhiteSpace(item.MapperTo))
                 {
                     var property = propertiesValue.FirstOrDefault(x => x.Key.Equals(item.MapperTo, StringComparison.InvariantCultureIgnoreCase));
@@ -102,7 +105,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
                             switch (item.Type)
                             {
                                 case "int":
-                                    if (int.TryParse(property.Value.ToString(), out int resInt)) 
+                                    if (int.TryParse(property.Value.ToString(), out int resInt))
                                     {
                                         expandoDict.Add(item.Name, resInt);
                                     }
@@ -111,7 +114,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
                                     if (long.TryParse(property.Value.ToString(), out long resLong))
                                     {
                                         expandoDict.Add(item.Name, resLong);
-                                    } 
+                                    }
                                     break;
                                 case "decimal":
                                     if (float.TryParse(property.Value.ToString(), out float resFloat))
@@ -130,6 +133,19 @@ namespace Aranda.Integration.ServiceNow.Extensions
                                     {
                                         expandoDict.Add(item.Name, resDate);
                                     }
+                                    break;
+                                case "array":
+                                    string[] arr = ((IEnumerable)property.Value).Cast<object>()
+                                                     .Select(x => x.ToString())
+                                                     .ToArray();
+                                    StringBuilder sbuilder = new StringBuilder();
+                                    foreach (string value in arr)
+                                    {
+                                        sbuilder.Append(value);
+                                        sbuilder.Append(',');
+                                    }
+
+                                    expandoDict.Add(item.Name, sbuilder.ToString());
                                     break;
                                 default:
 
@@ -173,14 +189,34 @@ namespace Aranda.Integration.ServiceNow.Extensions
             {
                 expandoDict.AddProperty(fieldNotMaped.Name, fieldNotMaped.DefaultValue);
             }
+
+            validationFields = expando.ValidateRequiredFields(fieldTables);
         }
 
+        public static Dictionary<string, object> KeyValuePairs(this object target)
+        {
+            Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
+
+            JToken json = JToken.Parse(JsonConvert.SerializeObject(target));
+
+            JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(json);
+            var fields = fieldsCollector.GetAllFields().ToList();
+
+            foreach (var parameter in fields)
+            {
+                keyValuePairs.Add(parameter.Key, parameter.Value);
+            }
+
+            return keyValuePairs;
+        }
         public static IEnumerable<string> GetMemberNames(this object target, bool dynamicOnly = false)
         {
-        Type ComObjectType = target.GetType();
-        dynamic ComBinder = target;
+            Type ComObjectType = target.GetType();
+            dynamic ComBinder = target;
 
-        var tList = new List<string>();
+            var prop = target.GetType().GetProperties();
+
+            var tList = new List<string>();
 
             if (!dynamicOnly)
             {
@@ -188,7 +224,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
             }
 
             var tTarget = target as IDynamicMetaObjectProvider;
-          
+
             if (tTarget != null)
             {
                 tList.AddRange(tTarget.GetMetaObject(Expression.Constant(tTarget)).GetDynamicMemberNames());
@@ -202,12 +238,40 @@ namespace Aranda.Integration.ServiceNow.Extensions
             }
             return tList;
         }
+    }
 
 
-        //public static object GetValueProperty(this object o, string member)
-        //{
-        //    var objAccessor = ObjectAccessor.Create(o);
-        //    return objAccessor[member];
-        //}
+    internal class JsonFieldsCollector
+    {
+        private readonly Dictionary<string, JValue> fields;
+
+        public JsonFieldsCollector(JToken token)
+        {
+            fields = new Dictionary<string, JValue>();
+            CollectFields(token);
+        }
+
+        private void CollectFields(JToken jToken)
+        {
+            switch (jToken.Type)
+            {
+                case JTokenType.Object:
+                    foreach (var child in jToken.Children<JProperty>())
+                        CollectFields(child);
+                    break;
+                case JTokenType.Array:
+                    foreach (var child in jToken.Children())
+                        CollectFields(child);
+                    break;
+                case JTokenType.Property:
+                    CollectFields(((JProperty)jToken).Value);
+                    break;
+                default:
+                    fields.Add(jToken.Path, (JValue)jToken);
+                    break;
+            }
+        }
+
+        public IEnumerable<KeyValuePair<string, JValue>> GetAllFields() => fields;
     }
 }

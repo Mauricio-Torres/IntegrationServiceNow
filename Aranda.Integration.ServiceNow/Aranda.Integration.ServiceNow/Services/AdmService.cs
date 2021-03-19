@@ -59,8 +59,8 @@ namespace Aranda.Integration.ServiceNow.Services
                 Serial = "ANSJ10-JDAIJ-23222"
             };
 
-            List<Device> devices =  new List<Device>() { device };
-                                    //await GetDeviceDto(inputSearchDevice); 
+            List<Device> devices =  //new List<Device>() { device };
+                                    await GetDeviceDto(inputSearchDevice); 
 
             IEnumerable < Device> query = devices.Select(x => x);
 

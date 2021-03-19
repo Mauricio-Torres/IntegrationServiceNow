@@ -1,6 +1,6 @@
 {
-  "endpointAdm": "http://192.168.1.221/ADMAPI/",
-  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU3ODgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNzIyNjcwNTgwNilcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNTMyNTk2Nzg3OClcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjM3NSIsIlVzZXJOYW1lIjpudWxsfQ.lciqsjtUqynEDL6XHNYsCj2apfjPuZ59mnSX8ccrmGU",
+  "endpointAdm": "http://adm-server.westus2.cloudapp.azure.com/ADMAPI/",
+  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU5NjgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNjE4Nzg0ODk3NylcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNjEwMTQ3NTY5NClcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjM3NSIsIlVzZXJOYW1lIjpudWxsfQ.tZ4gtxgEvfvgAmUhznGklRXeH12J97uirXuWUinx5ZY",
   "userServiceNow": "admin",
   "passwordServiceNow": "Aleja2014.",
   "EndpointServiceNow": "https://dev52329.service-now.com/api/now/table/",
@@ -14,12 +14,73 @@
       //}
     ]
   },
+  "dataRelationship": [
+    {
+      "typeData": "Category",
+      "typeDevice": [ "Laptop", "Desktop" ],
+      "data": [
+        {
+          "name": "Computer",
+          "ciClass": "cmdb_ci_computer",
+          "productModelClass": "",
+          "assetClass": "alm_hardware",
+          "parentCategory": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "typeData": "Category",
+      "typeDevice": [ "Server" ],
+      "data": [
+        {
+          "name": "Server",
+          "ciClass": "cmdb_ci_server",
+          "productModelClass": "",
+          "assetClass": "alm_hardware",
+          "parentCategory": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "typeData": "Category",
+      "typeDevice": [ "Router", "Switch" ],
+      "data": [
+        {
+          "name": "",
+          "ciClass": "",
+          "productModelClass": "",
+          "assetClass": "",
+          "parentCategory": "",
+          "code": ""
+        }
+      ]
+    },
+    {
+      "typeData": "Category",
+      "typeDevice": [ "Printer" ],
+      "data": [
+        {
+          "name": "",
+          "ciClass": "",
+          "productModelClass": "",
+          "assetClass": "",
+          "parentCategory": "",
+          "code": ""
+        }
+      ]
+    }
+  ],
   "table": [
     {
       "nameReference": "cmdb_rel_ci",
       "name": "cmdb_rel_ci",
       "searchBy": [ "name" ],
-      "typeHadware": [],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "parent",
@@ -55,28 +116,13 @@
       ]
     },
     {
-      "nameReference": "cmdb_model",
-      "name": "cmdb_model",
-      "searchBy": [ "name" ],
-      "typeHadware": [],
-      "fields": [
-        {
-          "name": "",
-          "type": "string",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "required": true,
-          "defaultValue": ""
-        }
-      ]
-    },
-    {
       "nameReference": "sys_user",
       "name": "sys_user",
       "searchBy": [ "email" ],
-      "typeHadware": [],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "first_name",
@@ -130,7 +176,10 @@
       "nameReference": "core_company_manufacturer",
       "name": "core_company",
       "searchBy": [ "name" ],
-      "typeHadware": [],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "name",
@@ -166,7 +215,10 @@
       "nameReference": "core_company_company",
       "name": "core_company",
       "searchBy": [ "name" ],
-      "typeHadware": [],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "name",
@@ -201,7 +253,10 @@
       "nameReference": "sys_choice",
       "name": "sys_choice",
       "searchBy": [ "label" ],
-      "typeHadware": [],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "element",
@@ -267,7 +322,10 @@
       "nameReference": "cmdb_ci_computer",
       "name": "cmdb_ci_computer",
       "searchBy": [ "name", "object_id" ],
-      "typeHadware": [ "Desktop", "Laptop" ],
+      "typeDevice": [ "Desktop", "Laptop" ],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "os",
@@ -319,9 +377,10 @@
           "name": "model_id",
           "type": "string",
           "mapperTo": "model",
-          "reference": "cmdb_model",
+          "reference": "cmdb_hardware_product_model",
           "needId": true,
           "mapper": true,
+          "required": true,
           "defaultValue": ""
         },
         {
@@ -366,6 +425,7 @@
           "mapperTo": "id",
           "reference": "",
           "needId": false,
+          "required": true,
           "mapper": true,
           "defaultValue": ""
         },
@@ -386,144 +446,6 @@
           "needId": true,
           "mapper": true,
           "defaultValue": ""
-        },
-
-
-
-
-
-        {
-          "name": "cpu_core_count",
-          "type": "int",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "cpu_core_thread",
-          "type": "int",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "cpu_count",
-          "type": "int",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "cpu_name",
-          "type": "string",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "cpu_speed",
-          "type": "decimal",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "cpu_type",
-          "type": "string",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-
-        {
-          "name": "mac_address",
-          "type": "int",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "monitor",
-          "type": "boolean",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "u_name_owner",
-          "type": "boolean",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "ram",
-          "type": "decimal",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-        },
-        {
-          "name": "os_service_pack",
-          "type": "string",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "os_domain",
-          "type": "string",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "cd_rom",
-          "type": "boolean",
-          "mapperTo": "",
-          "reference": "",
-          "needId": false,
-          "mapper": true,
-          "defaultValue": ""
-
-        },
-        {
-          "name": "company",
-          "type": "string",
-          "mapperTo": "company",
-          "reference": "core_company_company",
-          "needId": true,
-          "mapper": false,
-          "defaultValue": ""
         }
       ]
     },
@@ -531,7 +453,10 @@
       "nameReference": "cmdb_ci_server",
       "name": "cmdb_ci_server",
       "searchBy": [ "" ],
-      "typeHadware": [ "Server" ],
+      "typeDevice": [ "Server" ],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "used_for",
@@ -591,7 +516,10 @@
       "nameReference": "cmdb_ci_hardware",
       "name": "cmdb_ci_hardware",
       "searchBy": [ "" ],
-      "typeHadware": [ "Server" ],
+      "typeDevice": [ "Unknown" ],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "hardware_status",
@@ -636,15 +564,69 @@
       ]
     },
     {
-      "nameReference": "cmdb_model_category",
-      "name": "cmdb_model_category",
+      "nameReference": "cmdb_hardware_product_model",
+      "name": "cmdb_hardware_product_model",
       "searchBy": [ "name" ],
-      "typeHadware": [ ],
+      "typeDevice": [],
+      "dataRelationship": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
       "fields": [
         {
           "name": "name",
           "type": "string",
-          "mapperTo": "",
+          "mapperTo": "model",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "string",
+          "mapperTo": "manufacturer",
+          "reference": "core_company_manufacturer",
+          "needId": true,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "short_description",
+          "type": "string",
+          "mapperTo": "model",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "cmdb_model_category",
+          "type": "array",
+          "mapperTo": "model",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_model_category",
+      "name": "cmdb_model_category",
+      "searchBy": [ "cmdb_ci_class" ],
+      "typeDevice": [],
+      "dataRelationship": true,
+      "nameDataRelationship": "Category",
+      "selectedItemSearch": "name",
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "name",
           "reference": "",
           "needId": false,
           "mapper": true,
@@ -654,32 +636,52 @@
         {
           "name": "cmdb_ci_class",
           "type": "string",
-          "mapperTo": "",
+          "mapperTo": "CiClass",
           "reference": "",
           "needId": false,
           "mapper": true,
-          "required": true,
-          "defaultValue": "cmdb_ci_hardware"
+          "required": false,
+          "defaultValue": ""
         },
         {
           "name": "product_model_class",
           "type": "string",
-          "mapperTo": "",
+          "mapperTo": "productModelClass",
           "reference": "",
           "needId": false,
           "mapper": true,
-          "required": true,
-          "defaultValue": "cmdb_hardware_product_model"
+          "required": false,
+          "defaultValue": ""
         },
         {
           "name": "asset_class",
           "type": "string",
-          "mapperTo": "",
+          "mapperTo": "assetClass",
           "reference": "",
           "needId": false,
           "mapper": true,
-          "required": true,
-          "defaultValue": "alm_hardware"
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "parent_cateogry",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "cmdb_model_category",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "code",
+          "type": "string",
+          "mapperTo": "",
+          "reference": "code",
+          "needId": false,
+          "mapper": true,
+          "required": false,
+          "defaultValue": ""
         }
       ]
     }

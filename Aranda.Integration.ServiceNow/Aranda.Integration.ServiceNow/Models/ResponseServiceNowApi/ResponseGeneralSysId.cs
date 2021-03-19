@@ -12,6 +12,7 @@ namespace Aranda.Integration.ServiceNow.Models.ResponseServiceNowApi
 
     internal class SysId
     {
+        public string name { get; set; }
         public string sys_id { get; set; }
     }
 

@@ -15,7 +15,7 @@ namespace Aranda.Integration.ServiceNow.Repository
     {
         public IntegrationConfiguration GetConfiguration()
         {
-            string path = @"C:\Users\Mauricio\Desktop\ARANDA\Service now\Aranda.Integration.ServiceNow\Aranda.Integration.ServiceNow\Repository\configuration.json";
+            string path = @"C:\Users\Mauricio\Documents\Proyectos Web\IntegrationServiceNow\Aranda.Integration.ServiceNow\Aranda.Integration.ServiceNow\Repository\configuration.json";
             IntegrationConfiguration configuration = new IntegrationConfiguration();
             using (StreamReader jsonStream = File.OpenText(path))
             {

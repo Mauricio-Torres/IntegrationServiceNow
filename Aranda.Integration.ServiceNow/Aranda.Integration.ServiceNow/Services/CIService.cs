@@ -18,7 +18,7 @@ namespace Aranda.Integration.ServiceNow.Services
         {
             Token = Constants.TypeAuthenticationBasic + Convert.ToBase64String(Encoding.ASCII.GetBytes($"{Configuration.UserServiceNow}:{Configuration.PasswordServiceNow}"));
         }
-        public async Task<string> CreateAttributeCI(string endPoint,  object obj, Dictionary<string, object> search)
+        public async Task<string> CreateAttributeCI(string endPoint,  object obj, Dictionary<string, object> search, string selectItem = null)
         {
             ResponseGeneralSysId answerGetCompanyApi;
             ResponseGetAttributeApi item = null;
@@ -36,10 +36,24 @@ namespace Aranda.Integration.ServiceNow.Services
             }
             else
             {
-                SysId sys_Id = new SysId
+                SysId sys_Id = new SysId();
+                
+                if (!string.IsNullOrWhiteSpace(selectItem))
                 {
-                    sys_id = item.result[0].sys_id
-                };
+                    string sysId = "";
+
+                    sysId = item.result.FirstOrDefault(x => x.name.Equals(selectItem, StringComparison.InvariantCultureIgnoreCase))?.sys_id;
+                    if (string.IsNullOrWhiteSpace(sysId))
+                    {
+                        sysId = item.result.FirstOrDefault().sys_id;
+                    }
+
+                    sys_Id.sys_id = sysId;
+                }
+                else
+                {
+                    sys_Id.sys_id = item.result.FirstOrDefault().sys_id;
+                }
 
                 answerGetCompanyApi = new ResponseGeneralSysId
                 {

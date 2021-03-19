@@ -15,5 +15,19 @@ namespace Aranda.Integration.ServiceNow.Extensions
              fieldsWithReference.AddRange(references);
             return fieldsWithReference;
         }
+
+        public static List<object> Data(this List<DataRelationship> dataRelationships)
+        {
+            List<object> list = new List<object>();
+
+            foreach(var data in dataRelationships)
+            {
+                foreach (var obj in data.Data)
+                {
+                    list.Add(obj);
+                }
+            }
+            return list;
+        }
     }
 }
