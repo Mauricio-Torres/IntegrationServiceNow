@@ -1,8 +1,5 @@
 ﻿using Aranda.Integration.ServiceNow.Models.Configuration;
-using Aranda.Integration.ServiceNow.Services;
 using Aranda.Integration.ServiceNow.Utils;
-using FastMember;
-using Microsoft.CSharp.RuntimeBinder;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -10,11 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Aranda.Integration.ServiceNow.Extensions
 {
@@ -33,28 +26,6 @@ namespace Aranda.Integration.ServiceNow.Extensions
                 else
                 {
                     expandoDict.Add(propertyName, propertyValue);
-                }
-            }
-
-            return expandoDict;
-        }
-
-        public static object AddProperty(this object expando, Dictionary<string, object> propertiesValue)
-        {
-            var expandoDict = expando as IDictionary<string, object>;
-
-            foreach (var item in propertiesValue)
-            {
-                if (item.Value != null || string.IsNullOrEmpty(item.Value.ToString()))
-                {
-                    if (expandoDict.ContainsKey(item.Key))
-                    {
-                        expandoDict[item.Key] = item.Value;
-                    }
-                    else
-                    {
-                        expandoDict.Add(item.Key, item.Value);
-                    }
                 }
             }
 
@@ -196,7 +167,6 @@ namespace Aranda.Integration.ServiceNow.Extensions
         public static Dictionary<string, object> KeyValuePairs(this object target)
         {
             Dictionary<string, object> keyValuePairs = new Dictionary<string, object>();
-
             JToken json = JToken.Parse(JsonConvert.SerializeObject(target));
 
             JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(json);
@@ -209,69 +179,19 @@ namespace Aranda.Integration.ServiceNow.Extensions
 
             return keyValuePairs;
         }
-        public static IEnumerable<string> GetMemberNames(this object target, bool dynamicOnly = false)
+
+        private static IEnumerable<string> GetMemberNames(this object target)
         {
-            Type ComObjectType = target.GetType();
-            dynamic ComBinder = target;
+            JToken json = JToken.Parse(JsonConvert.SerializeObject(target));
 
-            var prop = target.GetType().GetProperties();
-
-            var tList = new List<string>();
-
-            if (!dynamicOnly)
-            {
-                tList.AddRange(target.GetType().GetProperties().Select(it => it.Name));
-            }
-
-            var tTarget = target as IDynamicMetaObjectProvider;
-
-            if (tTarget != null)
-            {
-                tList.AddRange(tTarget.GetMetaObject(Expression.Constant(tTarget)).GetDynamicMemberNames());
-            }
-            else
-            {
-                if (ComObjectType != null && ComObjectType.IsInstanceOfType(target) && ComBinder.IsAvailable)
-                {
-                    tList.AddRange(ComBinder.GetDynamicDataMemberNames(target));
-                }
-            }
-            return tList;
-        }
-    }
-
-
-    internal class JsonFieldsCollector
-    {
-        private readonly Dictionary<string, JValue> fields;
-
-        public JsonFieldsCollector(JToken token)
-        {
-            fields = new Dictionary<string, JValue>();
-            CollectFields(token);
+            JsonFieldsCollector fieldsCollector = new JsonFieldsCollector(json);
+            return fieldsCollector.GetAllFields().Select(x => x.Key);
         }
 
-        private void CollectFields(JToken jToken)
-        {
-            switch (jToken.Type)
-            {
-                case JTokenType.Object:
-                    foreach (var child in jToken.Children<JProperty>())
-                        CollectFields(child);
-                    break;
-                case JTokenType.Array:
-                    foreach (var child in jToken.Children())
-                        CollectFields(child);
-                    break;
-                case JTokenType.Property:
-                    CollectFields(((JProperty)jToken).Value);
-                    break;
-                default:
-                    fields.Add(jToken.Path, (JValue)jToken);
-                    break;
-            }
-        }
 
-        public IEnumerable<KeyValuePair<string, JValue>> GetAllFields() => fields;
+        private static void Tree<T>(this T target) where T : class
+        {            
+            
+        }
     }
 }

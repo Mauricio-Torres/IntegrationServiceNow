@@ -1,6 +1,6 @@
 {
   "endpointAdm": "http://adm-server.westus2.cloudapp.azure.com/ADMAPI/",
-  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU5NjgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNjE4Nzg0ODk3NylcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNjEwMTQ3NTY5NClcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjM3NSIsIlVzZXJOYW1lIjpudWxsfQ.tZ4gtxgEvfvgAmUhznGklRXeH12J97uirXuWUinx5ZY",
+  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU5NjgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNjM2NjM3MDAzMClcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNjI3OTk4MTIxNilcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjEiLCJVc2VyTmFtZSI6bnVsbH0.yWC7VA9ivdGa_rh_eHpR9eRDfhun6BYq6wJgZTmuwJo",
   "userServiceNow": "admin",
   "passwordServiceNow": "Aleja2014.",
   "EndpointServiceNow": "https://dev52329.service-now.com/api/now/table/",
@@ -14,7 +14,7 @@
       //}
     ]
   },
-  "dataRelationship": [
+  "relationshipData": [
     {
       "typeData": "Category",
       "typeDevice": [ "Laptop", "Desktop" ],
@@ -78,7 +78,7 @@
       "name": "cmdb_rel_ci",
       "searchBy": [ "name" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -120,7 +120,7 @@
       "name": "sys_user",
       "searchBy": [ "email" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -177,7 +177,7 @@
       "name": "core_company",
       "searchBy": [ "name" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -216,7 +216,7 @@
       "name": "core_company",
       "searchBy": [ "name" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -227,6 +227,7 @@
           "reference": "",
           "needId": false,
           "mapper": true,
+          "required": true,
           "defaultValue": ""
         },
         {
@@ -254,7 +255,7 @@
       "name": "sys_choice",
       "searchBy": [ "label" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -321,9 +322,9 @@
     {
       "nameReference": "cmdb_ci_computer",
       "name": "cmdb_ci_computer",
-      "searchBy": [ "name", "object_id" ],
+      "searchBy": [ "object_id" ],
       "typeDevice": [ "Desktop", "Laptop" ],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -454,7 +455,7 @@
       "name": "cmdb_ci_server",
       "searchBy": [ "" ],
       "typeDevice": [ "Server" ],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -517,7 +518,7 @@
       "name": "cmdb_ci_hardware",
       "searchBy": [ "" ],
       "typeDevice": [ "Unknown" ],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -568,7 +569,7 @@
       "name": "cmdb_hardware_product_model",
       "searchBy": [ "name" ],
       "typeDevice": [],
-      "dataRelationship": false,
+      "hasReferencedData": false,
       "nameDataRelationship": null,
       "selectedItemSearch": null,
       "fields": [
@@ -605,7 +606,17 @@
         {
           "name": "cmdb_model_category",
           "type": "array",
-          "mapperTo": "model",
+          "mapperTo": "categoryDevice",
+          "reference": "cmdb_model_category",
+          "needId": false,
+          "mapper": false,
+          "required": false,
+          "defaultValue": ""
+        },
+        {
+          "name": "model_number",
+          "type": "string",
+          "mapperTo": "",
           "reference": "",
           "needId": false,
           "mapper": true,
@@ -619,7 +630,7 @@
       "name": "cmdb_model_category",
       "searchBy": [ "cmdb_ci_class" ],
       "typeDevice": [],
-      "dataRelationship": true,
+      "hasReferencedData": true,
       "nameDataRelationship": "Category",
       "selectedItemSearch": "name",
       "fields": [
@@ -667,7 +678,7 @@
           "name": "parent_cateogry",
           "type": "string",
           "mapperTo": "",
-          "reference": "cmdb_model_category",
+          "reference": "",
           "needId": false,
           "mapper": true,
           "required": false,
@@ -676,8 +687,8 @@
         {
           "name": "code",
           "type": "string",
-          "mapperTo": "",
-          "reference": "code",
+          "mapperTo": "code",
+          "reference": "",
           "needId": false,
           "mapper": true,
           "required": false,

@@ -29,5 +29,13 @@ namespace Aranda.Integration.ServiceNow.Extensions
             }
             return list;
         }
+
+        public static Table GetTableReferenced(this List<Table> tables, string tableNameSearch, out bool tableHasNotReferences)
+        {
+            Table table = tables.FirstOrDefault(t => t.NameReference.Equals(tableNameSearch, StringComparison.InvariantCultureIgnoreCase));
+            tableHasNotReferences = table.Fields.Count(x => string.IsNullOrWhiteSpace(x.Reference)) == table.Fields.Count;
+            return table;
+        }
+
     }
 }

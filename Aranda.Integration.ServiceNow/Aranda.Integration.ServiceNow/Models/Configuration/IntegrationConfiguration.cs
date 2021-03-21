@@ -14,7 +14,7 @@ namespace Aranda.Integration.ServiceNow.Models.Configuration
         public string EndpointServiceNow { get; set; }
         public RelationShip Relationship { get; set; }
         public List<Table> Table { get; set; }
-        public List<DataRelationship> DataRelationship { set; get; }
+        public List<DataRelationship> RelationshipData { set; get; }
     }
 
     public class RelationShip
@@ -41,11 +41,11 @@ namespace Aranda.Integration.ServiceNow.Models.Configuration
     {
         public string NameReference { get; set; }
         public string Name { get; set; }
-        public bool DataRelationship { set; get; }
-        public string NameDataRelationship { get; set; }
-        public string SelectedItemSearch { get; set; }
         public List<string> SearchBy { get; set; }
         public List<string> TypeDevice { get; set; }
+        public bool HasReferencedData { set; get; }
+        public string NameDataRelationship { get; set; }
+        public string SelectedItemSearch { get; set; }
         public List<FieldTable> Fields { get; set; }
     }
 

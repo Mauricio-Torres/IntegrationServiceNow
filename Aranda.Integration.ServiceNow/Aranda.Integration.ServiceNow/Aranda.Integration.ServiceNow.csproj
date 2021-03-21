@@ -111,6 +111,8 @@
     <Compile Include="Utils\Constants.cs" />
     <Compile Include="Utils\CustomException.cs" />
     <Compile Include="Utils\GenericPropertyEntity.cs" />
+    <Compile Include="Utils\JsonFieldsCollector.cs" />
+    <Compile Include="Utils\TreeNode.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
