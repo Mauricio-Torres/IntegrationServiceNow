@@ -57,14 +57,14 @@ namespace Aranda.Integration.ServiceNow.Models.Configuration
 
     }
 
-    public class Category
-    {
-        public string Name { get; set; }
-        public string CiClass { get; set; }
-        public string ProductModelClass { get; set; }
-        public string AssetClass { get; set; }
-        public string ParentCategory { get; set; }
-        public string Code { get; set; }
-    }
+    //public class Category
+    //{
+    //    public string Name { get; set; }
+    //    public string CiClass { get; set; }
+    //    public string ProductModelClass { get; set; }
+    //    public string AssetClass { get; set; }
+    //    public string ParentCategory { get; set; }
+    //    public string Code { get; set; }
+    //}
 
 }

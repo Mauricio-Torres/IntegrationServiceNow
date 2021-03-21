@@ -42,10 +42,10 @@ namespace Aranda.Integration.ServiceNow.Services
             {
                 Dictionary<string, object> propertyDevice = GenericPropertyEntity<Device>.ModelProperty(device);
 
-                Table table = Configuration.Table.FirstOrDefault(t => t.TypeDevice.Any(x => x == device.Type));
+                Table tableDevice = Configuration.Table.FirstOrDefault(t => t.TypeDevice.Any(x => x == device.Type));
 
                 List<FieldTable> fieldsWithReference = new List<FieldTable>();
-                fieldsWithReference.AddReferences(table.Fields);
+                fieldsWithReference.AddReferences(tableDevice.Fields);
                 
                 Dictionary<string, object> tableResolved = new Dictionary<string, object>();
 
@@ -53,21 +53,20 @@ namespace Aranda.Integration.ServiceNow.Services
                 {
                     Table tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasNotReferences);
 
-                    string keyTableResolved = tableResolved.GetKeyProperty(tableReference.NameReference);
-
-                    if (string.IsNullOrWhiteSpace(keyTableResolved))
+                    if (!tableResolved.ContainsKey(tableReference.NameReference, out string keyTableResolved))
                     {
                         if (tableHasNotReferences)
                         {
                             object dataResolved = await SolveReference(propertyDevice, tableReference, device);
-
+                           
+                            bool findKeyPDevice= propertyDevice.ContainsKey(field.MapperTo, out string nameKeyPDevice);
+                           
                             if (field.NeedId)
                             {
-                                string key = propertyDevice.GetKeyProperty(field.MapperTo);
 
-                                if (key != null)
+                                if (findKeyPDevice)
                                 {
-                                    propertyDevice[key] = dataResolved;
+                                    propertyDevice[nameKeyPDevice] = dataResolved;
                                 }
                                 else
                                 {
@@ -77,89 +76,76 @@ namespace Aranda.Integration.ServiceNow.Services
 
                             if (dataResolved == null)
                             {
-                                string key = propertyDevice.GetKeyProperty(field.MapperTo);
-                                propertyDevice.Remove(key);
+                                propertyDevice.Remove(nameKeyPDevice);
                             }
                         }
                         else
                         {
                             tables = new Stack<Table>();
-                            var tableWR = SolveTableWithReference(tableReference);
+                            Stack<Table> listTableResolved = SolveTableWithReference(tableReference);
 
-                            foreach (var item in tableWR)
+                            foreach (var table in listTableResolved)
                             {
-                                var references = item.Fields.Where(reference => !string.IsNullOrWhiteSpace(reference.Reference)).ToList();
+                                List<FieldTable> references = table.Fields.Where(reference => !string.IsNullOrWhiteSpace(reference.Reference)).ToList();
 
                                 if (references.Count == 0)
                                 {
-                                    tableResolved.Add(item.NameReference, await SolveReference(propertyDevice, item, device));
+                                    tableResolved.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
                                 }
                                 else
                                 {
                                     foreach (var r in references)
                                     {
-                                        string key = propertyDevice.GetKeyProperty(r.MapperTo);
-
-                                        if (key != null)
+                                        if (propertyDevice.ContainsKey(r.MapperTo, out string keySetValue))
                                         {
-                                            string value = tableResolved.GetKeyProperty(r.Reference);
-
-                                            if (value != null)
+                                            if (tableResolved.ContainsKey(r.Reference, out string keyValueTResolved))
                                             {
-                                                propertyDevice[key] = tableResolved[value];
+                                                propertyDevice[keySetValue] = tableResolved[keyValueTResolved];
                                             }
                                         }
                                         else
                                         {
-                                            string value = tableResolved.GetKeyProperty(r.Reference);
-                                            if (value != null)
+                                            if (tableResolved.ContainsKey(r.Reference, out string keyValueTResolved))
                                             {
-                                                propertyDevice.Add(r.MapperTo, tableResolved[value]);
+                                                propertyDevice.Add(r.MapperTo, tableResolved[keyValueTResolved]);
                                             }
                                         }
                                     }
 
-                                    tableResolved.Add(item.NameReference, await SolveReference(propertyDevice, item, device));
+                                    tableResolved.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
                                 }
                             }
 
-                            string keyV = tableResolved.GetKeyProperty(field.Reference);
-
-                            if (keyV != null)
+                            if (tableResolved.GetKeyProperty(field.Reference, out string keyTResolved, out object valueTableResolved ))
                             {
-                                string key = propertyDevice.GetKeyProperty(field.MapperTo);
-
-                                if (key != null)
+                                if (propertyDevice.ContainsKey(field.MapperTo, out string keyPDevice))
                                 {
-                                    propertyDevice[key] = tableResolved[keyV];
+                                    propertyDevice[keyPDevice] = valueTableResolved;
                                 }
                                 else
                                 {
-                                    propertyDevice.Add(field.MapperTo, tableResolved[keyV]);
+                                    propertyDevice.Add(field.MapperTo, valueTableResolved);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        string key = propertyDevice.GetKeyProperty(field.MapperTo);
-
-                        if (key != null)
+                        if (propertyDevice.ContainsKey(field.MapperTo, out string keySetParameter))
                         {
-                            propertyDevice[key] = tableResolved[keyTableResolved];
+                            propertyDevice[keySetParameter] = tableResolved[keyTableResolved];
                         }
-                    }
-                    
+                    } 
                 }
 
-                string urlCI = EndpointServiceNow + table.Name;
+                string urlCI = EndpointServiceNow + tableDevice.Name;
                 ExpandoObject inputCreateCI = new ExpandoObject();
-                inputCreateCI.AddProperty(propertyDevice, table.Fields, out bool validateRequiredFieldsCI);
+                inputCreateCI.AddProperty(propertyDevice, tableDevice.Fields, out bool validateRequiredFieldsCI);
                
                 if (validateRequiredFieldsCI)
                 {
                     Dictionary<string, object> keyValueSearch = new Dictionary<string, object>();
-                    keyValueSearch.SetValueProperty(propertyDevice, table);
+                    keyValueSearch.SetValueProperty(propertyDevice, tableDevice);
 
                     answer.Add(await AttributeCIService.CreateCI(urlCI, inputCreateCI, keyValueSearch));
                 }
@@ -272,134 +258,3 @@ namespace Aranda.Integration.ServiceNow.Services
         }
     }
 }
-
-
-//private  void SetDataCI(Table table, Dictionary<string, object> propertyDeviceBase, Device device, out Dictionary<string, object> pairsData)
-//{
-//    pairsData = propertyDeviceBase;
-
-//    List<FieldTable> fieldsWithReference = new List<FieldTable>();
-//    fieldsWithReference.AddReferences(table.Fields);
-
-//    foreach (var field in fieldsWithReference)
-//    {
-//        Table tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasNotReferences);
-
-//        if (tableReference.HasReferencedData)
-//        {
-//           var listReferencedData =  CreateRelatedData(tableReference, device);
-//        }
-
-//        string urlAtributeCI = EndpointServiceNow + tableReference.Name;
-//        string answerSys_Id = string.Empty;
-
-//        if (tableHasNotReferences)
-//        {
-//            ExpandoObject inputCreateCIReference = new ExpandoObject();
-//            inputCreateCIReference.AddProperty(propertyDeviceBase, tableReference.Fields, out bool validateRequiredFieldsAttribute);
-
-//            if (validateRequiredFieldsAttribute)
-//            {
-//                Dictionary<string, object> valueSearch = new Dictionary<string, object>();
-//                valueSearch.SetValueProperty(propertyDeviceBase, tableReference);
-
-//                answerSys_Id = AttributeCIService.CreateAttributeCI(urlAtributeCI, inputCreateCIReference, valueSearch).Result;
-
-//                if (field.NeedId)
-//                {
-//                    string key = propertyDeviceBase.GetKeyProperty(field.MapperTo);
-//                    if (key != null)
-//                    {
-//                        pairsData[key] = answerSys_Id;
-//                    }
-//                }
-//            }
-//            else
-//            {
-//                string key = pairsData.GetKeyProperty(field.MapperTo);
-//                pairsData.Remove(key);
-//            } 
-//        }
-//        else
-//        {
-//           SetDataCI(tableReference, propertyDeviceBase, device, out pairsData);
-//        }
-//    }
-//}
-
-
-
-//if (table.NeedCategory && table.CategoryTableName != null && table.CategoryTableName.Count > 0)
-//{
-//    List<string> categoriesForDevice = new List<string>();
-//    List<Table> listTableWithData = Configuration.Table.Where(t => table.CategoryTableName.Contains(t.NameReference)).ToList();
-
-//    foreach (var tableWithData in listTableWithData)
-//    {
-//        List<RelationshipData> relatedData = Configuration.RelationshipData.Where(
-//            x => x.TypeData.Equals(tableWithData.NameDataRelationship, StringComparison.InvariantCultureIgnoreCase) &&
-//            x.TypeDevice.Any(d => d.Equals(device.Type, StringComparison.InvariantCultureIgnoreCase))).ToList();
-
-//        List<object> listData = relatedData.Data();
-
-//        foreach (var data in listData)
-//        {
-//            Dictionary<string, object> keyValuePairs = data.KeyValuePairs();
-//            ExpandoObject inputCreateCategoryCI = new ExpandoObject();
-//            inputCreateCategoryCI.AddProperty(keyValuePairs, tableWithData.Fields, out bool validateRequiredFieldsCategory);
-
-//            string urlCategoryCI = EndpointServiceNow + tableWithData.Name;
-
-//            if (validateRequiredFieldsCategory)
-//            {
-//                Dictionary<string, object> valueSearch = new Dictionary<string, object>();
-//                valueSearch.SetValueProperty(keyValuePairs, tableWithData);
-//                keyValuePairs.TryGetValue(tableWithData.SelectedItemSearch, out object value);
-//                categoriesForDevice.Add(await AttributeCIService.CreateAttributeCI(urlCategoryCI, inputCreateCategoryCI, valueSearch, value.ToString()));
-//            }
-//        }
-//    }
-//}
-
-//List<FieldTable> fieldsWithReference = new List<FieldTable>();
-//fieldsWithReference.AddReferences(table.Fields);
-
-//foreach (var field in fieldsWithReference)
-//{
-//    Table tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasNotReferences);
-
-//    string urlAtributeCI = EndpointServiceNow + tableReference.Name;
-
-//    if (tableHasNotReferences)
-//    {
-//        ExpandoObject inputCreateCIReference = new ExpandoObject();
-//        inputCreateCIReference.AddProperty(propertyDevice, tableReference.Fields, out bool validateRequiredFieldsAttribute);
-
-//        if (validateRequiredFieldsAttribute)
-//        {
-//            Dictionary<string, object> valueSearch = new Dictionary<string, object>();
-//            valueSearch.SetValueProperty(propertyDevice, tableReference);
-
-//            string answerSys_Id = await AttributeCIService.CreateAttributeCI(urlAtributeCI, inputCreateCIReference, valueSearch);
-
-//            if (field.NeedId)
-//            {
-//                string key = propertyDevice.GetKeyProperty(field.MapperTo);
-//                if (key != null)
-//                {
-//                    propertyDevice[key] = answerSys_Id;
-//                }
-//            }
-//        }
-//        else
-//        {
-//            string key = propertyDevice.GetKeyProperty(field.MapperTo);
-//            propertyDevice.Remove(key);
-//        }
-//    }
-//    else
-//    {
-//        SetDataCI(tableReference, propertyDevice, out Dictionary<string, object> pairsData);
-//        propertyDevice = pairsData;
-//    }
-//}
