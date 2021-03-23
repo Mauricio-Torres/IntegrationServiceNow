@@ -1,6 +1,6 @@
 {
   "endpointAdm": "http://adm-server.westus2.cloudapp.azure.com/ADMAPI/",
-  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU5NjgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNjM2NjM3MDAzMClcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNjI3OTk4MTIxNilcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjEiLCJVc2VyTmFtZSI6bnVsbH0.yWC7VA9ivdGa_rh_eHpR9eRDfhun6BYq6wJgZTmuwJo",
+  "tokenAdm": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJBdWRpZW5jZSI6IkludGVncmF0aW9uIiwiQXV0aGVudGljYXRpb25Db250ZXh0Q2xhc3MiOm51bGwsIkF1dGhlbnRpY2F0aW9uTWV0aG9kcyI6bnVsbCwiQXV0aGVudGljYXRpb25UaW1lIjoiXC9EYXRlKC02MjEzNTU5NjgwMDAwMClcLyIsIkF1dGhvcml6ZWRQYXJ0eSI6bnVsbCwiRXhwaXJhdGlvblRpbWUiOiJcL0RhdGUoMTYxNjU5ODEyMDA2NylcLyIsIklzc3VlZFRpbWUiOiJcL0RhdGUoMTYxNjUxMTczMTk2NClcLyIsIklzc3VlcklkZW50aWZpZXIiOm51bGwsIk5vbmNlIjpudWxsLCJTdWJqZWN0IjpudWxsLCJTdWJqZWN0SWRlbnRpZmllciI6IjEiLCJVc2VyTmFtZSI6bnVsbH0.3DIB_WJMUx9737d5TF0_pD7CikF6kUSZ2tJLzJGAFcc",
   "userServiceNow": "admin",
   "passwordServiceNow": "Aleja2014.",
   "EndpointServiceNow": "https://dev52329.service-now.com/api/now/table/",
@@ -381,7 +381,7 @@
           "reference": "cmdb_hardware_product_model",
           "needId": true,
           "mapper": true,
-          "required": true,
+          "required": false,
           "defaultValue": ""
         },
         {
@@ -404,7 +404,7 @@
         },
         {
           "name": "ip_address",
-          "type": "int",
+          "type": "string",
           "mapperTo": "ipRegistred",
           "reference": "",
           "needId": false,
@@ -437,6 +437,55 @@
           "reference": "sys_user",
           "needId": true,
           "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "manufacturer",
+          "type": "string",
+          "mapperTo": "manufacturer",
+          "reference": "core_company_manufacturer",
+          "needId": true,
+          "mapper": true,
+          "defaultValue": ""
+        }
+      ]
+    },
+    {
+      "nameReference": "cmdb_ci_spkg",
+      "name": "cmdb_ci_spkg",
+      "searchBy": [ "name" ],
+      "typeDevice": [ "Application", "OperatingSystem", "Updates" ],
+      "hasReferencedData": false,
+      "nameDataRelationship": null,
+      "selectedItemSearch": null,
+      "fields": [
+        {
+          "name": "name",
+          "type": "string",
+          "mapperTo": "name",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "required": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "version",
+          "type": "string",
+          "mapperTo": "version",
+          "reference": "",
+          "needId": false,
+          "mapper": true,
+          "defaultValue": ""
+        },
+        {
+          "name": "install_count",
+          "type": "int",
+          "mapperTo": "installations",
+          "reference": "",
+          "needId": true,
+          "mapper": true,
+          "required": false,
           "defaultValue": ""
         },
         {
@@ -678,7 +727,7 @@
           "name": "parent_cateogry",
           "type": "string",
           "mapperTo": "",
-          "reference": "",
+          "reference": "cmdb_model_category",
           "needId": false,
           "mapper": true,
           "required": false,

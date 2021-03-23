@@ -25,7 +25,7 @@ namespace Aranda.Integration.ServiceNow.Services
                 orderField = "name",
                 orderType = "ASC",
                 pageIndex = 0,
-                pageSize = 1
+                pageSize = 10
             };
 
             Device device = new Device
@@ -36,7 +36,7 @@ namespace Aranda.Integration.ServiceNow.Services
                 DaysSinceLastInventory = 1,
                 Discovery = false,
                 LastInventory = Convert.ToDateTime("2021-03-10T12:30:14.723-05:00"),
-                Manufacturer = "Hewlett-Packard test 2",
+                Manufacturer = "",
                 MemoryUsage = 47.183217421046628,
                 ResponsibleUserEmail = "julieth.mancera@arandasoft.com",
                 ResponsibleUserId = 371,
@@ -50,13 +50,14 @@ namespace Aranda.Integration.ServiceNow.Services
                 Description = "Test desck ",
                 DiskUsage = 40.2323,
                 Domain = "INTERSEQ.LOCAL",
-                Id = 20,
-                Model = "asus",
+                Id = 52,
+                Model = "test m sin manuf",
                 IpRegistred = "192.168.001.144",
-                Name = "",
+                Name = "test device 3",
                 OperatingSystem = "windows 10 home v9",
                 OperatingSystemVersion = "v-9.0.1",
-                Serial = "ANSJ10-JDAIJ-23222"
+                Serial = "ANSJ10-JDAIJ-23222",
+                
             };
 
             List<Device> devices =  //new List<Device>() { device };

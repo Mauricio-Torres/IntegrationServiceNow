@@ -15,7 +15,7 @@ namespace Aranda.Integration.ServiceNow.Extensions
         {
             return o.FirstOrDefault(x => x.Key.Equals(member, StringComparison.InvariantCultureIgnoreCase)).Value;
         }
-        public static bool GetKeyProperty(this Dictionary<string, object> o, string member, out string nameKey, out object value)
+        public static bool ContainsKey(this Dictionary<string, object> o, string member, out string nameKey, out object value)
         {     
             nameKey = o.FirstOrDefault(x => x.Key.Equals(member, StringComparison.InvariantCultureIgnoreCase)).Key;
 

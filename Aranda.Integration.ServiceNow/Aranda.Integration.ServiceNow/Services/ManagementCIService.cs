@@ -15,18 +15,18 @@ namespace Aranda.Integration.ServiceNow.Services
 {
     sealed class ManagementCIService : BaseService, IManagementCIService
     {
-        private readonly ICIService AttributeCIService;
+        private readonly ICIService CIService;
         private readonly IAdmService AdmService;
         private Stack<Table> tables;
 
-        private string EndpointServiceNow {set; get;}
+        private string EndpointServiceNow { set; get; }
         public ManagementCIService(IConectionService conectionService,
                                    IConfigureRepository configureService,
                                    IAdmService admService,
-                                   ICIService attributeCIService) :
+                                   ICIService ciService) :
         base(conectionService, configureService)
         {
-            AttributeCIService = attributeCIService;
+            CIService = ciService;
             AdmService = admService;
 
             EndpointServiceNow = Configuration.EndpointServiceNow;
@@ -46,38 +46,20 @@ namespace Aranda.Integration.ServiceNow.Services
 
                 List<FieldTable> fieldsWithReference = new List<FieldTable>();
                 fieldsWithReference.AddReferences(tableDevice.Fields);
-                
-                Dictionary<string, object> tableResolved = new Dictionary<string, object>();
+
+                Dictionary<string, object> listResolvedReferences = new Dictionary<string, object>();
 
                 foreach (var field in fieldsWithReference)
                 {
                     Table tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasNotReferences);
 
-                    if (!tableResolved.ContainsKey(tableReference.NameReference, out string keyTableResolved))
+                    if (!listResolvedReferences.ContainsKey(tableReference.NameReference, out string keyTableResolved))
                     {
                         if (tableHasNotReferences)
                         {
                             object dataResolved = await SolveReference(propertyDevice, tableReference, device);
-                           
-                            bool findKeyPDevice= propertyDevice.ContainsKey(field.MapperTo, out string nameKeyPDevice);
-                           
-                            if (field.NeedId)
-                            {
-
-                                if (findKeyPDevice)
-                                {
-                                    propertyDevice[nameKeyPDevice] = dataResolved;
-                                }
-                                else
-                                {
-                                    propertyDevice.Add(field.MapperTo, dataResolved);
-                                }
-                            }
-
-                            if (dataResolved == null)
-                            {
-                                propertyDevice.Remove(nameKeyPDevice);
-                            }
+                            listResolvedReferences.Add(tableReference.NameReference, dataResolved);
+                            AddValuesDeviceProperties(field, dataResolved, in propertyDevice);
                         }
                         else
                         {
@@ -90,64 +72,61 @@ namespace Aranda.Integration.ServiceNow.Services
 
                                 if (references.Count == 0)
                                 {
-                                    tableResolved.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
+                                    listResolvedReferences.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
                                 }
                                 else
                                 {
                                     foreach (var r in references)
                                     {
-                                        if (propertyDevice.ContainsKey(r.MapperTo, out string keySetValue))
+                                        if (r.NeedId)
                                         {
-                                            if (tableResolved.ContainsKey(r.Reference, out string keyValueTResolved))
+                                            if (propertyDevice.ContainsKey(r.MapperTo, out string keySetValue))
                                             {
-                                                propertyDevice[keySetValue] = tableResolved[keyValueTResolved];
+                                                if (listResolvedReferences.ContainsKey(r.Reference, out string keyValueTResolved))
+                                                {
+                                                    propertyDevice[keySetValue] = listResolvedReferences[keyValueTResolved];
+                                                }
                                             }
-                                        }
-                                        else
-                                        {
-                                            if (tableResolved.ContainsKey(r.Reference, out string keyValueTResolved))
+                                            else
                                             {
-                                                propertyDevice.Add(r.MapperTo, tableResolved[keyValueTResolved]);
+                                                if (listResolvedReferences.ContainsKey(r.Reference, out string keyValueTResolved))
+                                                {
+                                                    propertyDevice.Add(r.MapperTo, listResolvedReferences[keyValueTResolved]);
+                                                }
                                             }
                                         }
                                     }
 
-                                    tableResolved.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
+                                    listResolvedReferences.Add(table.NameReference, await SolveReference(propertyDevice, table, device));
                                 }
                             }
 
-                            if (tableResolved.GetKeyProperty(field.Reference, out string keyTResolved, out object valueTableResolved ))
+                            if (listResolvedReferences.ContainsKey(field.Reference, out string keyTResolved, out object dataResolved))
                             {
-                                if (propertyDevice.ContainsKey(field.MapperTo, out string keyPDevice))
-                                {
-                                    propertyDevice[keyPDevice] = valueTableResolved;
-                                }
-                                else
-                                {
-                                    propertyDevice.Add(field.MapperTo, valueTableResolved);
-                                }
+                                AddValuesDeviceProperties(field, dataResolved, in propertyDevice);
                             }
                         }
                     }
                     else
                     {
-                        if (propertyDevice.ContainsKey(field.MapperTo, out string keySetParameter))
+                        if (field.NeedId && propertyDevice.ContainsKey(field.MapperTo, out string keySetParameter))
                         {
-                            propertyDevice[keySetParameter] = tableResolved[keyTableResolved];
+                            propertyDevice[keySetParameter] = listResolvedReferences[keyTableResolved];
                         }
-                    } 
+
+                    }
                 }
 
                 string urlCI = EndpointServiceNow + tableDevice.Name;
                 ExpandoObject inputCreateCI = new ExpandoObject();
                 inputCreateCI.AddProperty(propertyDevice, tableDevice.Fields, out bool validateRequiredFieldsCI);
-               
+
                 if (validateRequiredFieldsCI)
                 {
                     Dictionary<string, object> keyValueSearch = new Dictionary<string, object>();
                     keyValueSearch.SetValueProperty(propertyDevice, tableDevice);
 
-                    answer.Add(await AttributeCIService.CreateCI(urlCI, inputCreateCI, keyValueSearch));
+                    answer.Add(await CIService.CreateCI(urlCI, inputCreateCI, keyValueSearch));
                 }
 
                 if (Configuration.Relationship.ListRelationship.Count > 0)
@@ -163,7 +142,7 @@ namespace Aranda.Integration.ServiceNow.Services
 
                         Dictionary<string, object> valueSearchRelationship = GenericPropertyEntity<InputRelationShip>.ModelProperty(relation);
 
-                        await AttributeCIService.CreateRelationShip(urlRelation, atributeRelationship, valueSearchRelationship);
+                        await CIService.CreateRelationShip(urlRelation, atributeRelationship, valueSearchRelationship);
                     }
                 }
             }
@@ -171,7 +150,7 @@ namespace Aranda.Integration.ServiceNow.Services
             return answer;
         }
 
-        private async Task <List<string>> CreateRelatedData(Table table, Device device)
+        private async Task<List<string>> CreateRelatedData(Table table, Device device)
         {
             List<string> categoriesForDevice = new List<string>();
 
@@ -195,7 +174,7 @@ namespace Aranda.Integration.ServiceNow.Services
                     Dictionary<string, object> valueSearch = new Dictionary<string, object>();
                     valueSearch.SetValueProperty(keyValuePairs, table);
                     keyValuePairs.TryGetValue(table.SelectedItemSearch, out object value);
-                    categoriesForDevice.Add(await AttributeCIService.CreateAttributeCI(url, inputCreateCategoryCI, valueSearch, value.ToString()));
+                    categoriesForDevice.Add(await CIService.CreateAttributeCI(url, inputCreateCategoryCI, valueSearch, value.ToString()));
                 }
             }
 
@@ -221,16 +200,31 @@ namespace Aranda.Integration.ServiceNow.Services
                     Dictionary<string, object> valueSearch = new Dictionary<string, object>();
                     valueSearch.SetValueProperty(propertyDevice, tableReference);
 
-                    answerSys_Id = await AttributeCIService.CreateAttributeCI(urlAtributeCI, inputCreateCIReference, valueSearch);
+                    answerSys_Id = await CIService.CreateAttributeCI(urlAtributeCI, inputCreateCIReference, valueSearch);
                 }
 
                 return answerSys_Id;
             }
         }
+
+
+        private void AddValuesDeviceProperties(FieldTable field, object dataResolved, in Dictionary<string, object> propertyDevice)
+        {
+            if (field.NeedId)
+            {
+                if (propertyDevice.ContainsKey(field.MapperTo, out string nameKeyPDevice))
+                {
+                    propertyDevice[nameKeyPDevice] = dataResolved;
+                }
+                else
+                {
+                    propertyDevice.Add(field.MapperTo, dataResolved);
+                }
+            }
+        }
+
         private Stack<Table> SolveTableWithReference(Table table)
         {
-            Table tableReference;
-
             List<FieldTable> fieldsWithReference = new List<FieldTable>();
             fieldsWithReference.AddReferences(table.Fields);
 
@@ -239,18 +233,21 @@ namespace Aranda.Integration.ServiceNow.Services
                 tables.Push(table);
             }
 
-            foreach (var field in fieldsWithReference)
+            if (!fieldsWithReference.Any(f => f.Reference.Equals(table.NameReference)))
             {
-                tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasReferences);
-                
-                if (!tables.Contains(tableReference))
+                foreach (var field in fieldsWithReference)
                 {
-                    tables.Push(tableReference);
-                }
+                    Table tableReference = Configuration.Table.GetTableReferenced(field.Reference, out bool tableHasReferences);
 
-                if (!tableHasReferences)
-                {
-                    SolveTableWithReference(tableReference);
+                    if (!tables.Contains(tableReference))
+                    {
+                        tables.Push(tableReference);
+                    }
+
+                    if (!tableHasReferences)
+                    {
+                        SolveTableWithReference(tableReference);
+                    }
                 }
             }
 
