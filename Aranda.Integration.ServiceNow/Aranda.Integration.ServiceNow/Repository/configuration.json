@@ -20,12 +20,7 @@
       "typeDevice": [ "Laptop", "Desktop" ],
       "data": [
         {
-          "name": "Computer",
-          "ciClass": "cmdb_ci_computer",
-          "productModelClass": "",
-          "assetClass": "alm_hardware",
-          "parentCategory": "",
-          "code": ""
+          "ciClass": "cmdb_ci_computer"
         }
       ]
     },
